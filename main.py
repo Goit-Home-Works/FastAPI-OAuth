@@ -1,4 +1,6 @@
 import json
+import threading
+import webbrowser
 
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, Request, Query
@@ -84,6 +86,8 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error connecting to the database")
 
 
-
 if __name__ == "__main__":
+    # Start the web browser in a separate thread
+    threading.Thread(target=open_browser).start()
+    
     uvicorn.run('main:app', host="0.0.0.0", port=8000, reload=True)
